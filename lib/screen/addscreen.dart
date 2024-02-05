@@ -3,8 +3,8 @@ import 'package:todo_app_bloc/screen/widgets/addscreen_appbar.dart';
 
 class AddScreen extends StatelessWidget {
   AddScreen({super.key});
-  TextEditingController titleController = TextEditingController();
-  TextEditingController contentController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

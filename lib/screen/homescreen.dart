@@ -13,11 +13,26 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: const Text('Home'),
+      body: ListView.builder(
+          itemCount: 4,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text('title'),
+              subtitle: Text('descroption'),
+              trailing: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.delete),
+              ),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddScreen()));
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddScreen(),
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),
