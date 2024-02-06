@@ -1,9 +1,9 @@
 class Todo {
-  final String id;
+  final int? id;
   final String title;
   final String description;
 
-  Todo({this.title = '', required this.description, required this.id});
+  Todo({required this.title, required this.description, this.id});
   Map<String, dynamic> toMap() {
     return {
       'id': id,

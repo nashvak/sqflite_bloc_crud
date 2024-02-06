@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:todo_app_bloc/screen/addscreen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen({super.key, required this.database});
+  final Future<Database> database;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

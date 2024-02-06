@@ -1,20 +1,32 @@
 part of 'todo_bloc.dart';
 
-abstract class TodoEvent {
-  const TodoEvent();
+@immutable
+abstract class TodoEvent {}
+
+class LoadTodoEvent extends TodoEvent {
+  final List<Todo> allTodos;
+
+  LoadTodoEvent({required this.allTodos});
 }
 
 class AddTodoEvent extends TodoEvent {
   final Todo todo;
-  const AddTodoEvent({required this.todo});
+
+  AddTodoEvent({required this.todo});
 }
 
 class UpdateTodoEvent extends TodoEvent {
-  final int index;
-  const UpdateTodoEvent({required this.index});
+  final Todo todo;
+
+  UpdateTodoEvent({required this.todo});
 }
 
 class DeleteTodoEvent extends TodoEvent {
-  final Todo todo;
-  const DeleteTodoEvent({required this.todo});
+  final int id;
+
+  DeleteTodoEvent({required this.id});
 }
+
+class FloatingActionbuttonClicked extends TodoEvent {}
+
+class UpdateButtonClickEvent extends TodoEvent {}
