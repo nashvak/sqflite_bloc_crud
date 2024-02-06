@@ -49,7 +49,15 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       UpdateTodoEvent event, Emitter<TodoState> emit) {}
 
   FutureOr<void> deleteTodoFunction(
-      DeleteTodoEvent event, Emitter<TodoState> emit) {}
+      DeleteTodoEvent event, Emitter<TodoState> emit) async {
+    try {
+      await databaseHelper.deleteTodo(event.id);
+      final List<Todo> todos = await databaseHelper.getTodos();
+      emit(TodoLoadedState(todos: todos));
+    } catch (e) {
+      emit(TodoErrorState(msg: e.toString()));
+    }
+  }
 
   //  navigation
 
@@ -73,15 +81,6 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   //     where: 'id = ?',
   //     whereArgs: [todo.id],
   //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
-
-  // Future<void> deleteTodo(int id) async {
-  //   final Database db = await database;
-  //   await db.delete(
-  //     'todos',
-  //     where: 'id = ?',
-  //     whereArgs: [id],
   //   );
   // }
 }

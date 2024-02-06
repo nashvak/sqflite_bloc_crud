@@ -46,7 +46,10 @@ class HomeScreen extends StatelessWidget {
                       title: Text(state.todos[index].title),
                       subtitle: Text(state.todos[index].description),
                       trailing: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          todoBloc
+                              .add(DeleteTodoEvent(id: state.todos[index].id!));
+                        },
                         icon: const Icon(Icons.delete),
                       ),
                     );

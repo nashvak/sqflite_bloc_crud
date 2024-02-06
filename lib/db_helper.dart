@@ -50,4 +50,13 @@ class DatabaseHelper {
     await db!.insert('todos', todo.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
+
+  Future<void> deleteTodo(int id) async {
+    final Database? db = await database;
+    await db!.delete(
+      'todos',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }
