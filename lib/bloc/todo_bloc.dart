@@ -22,13 +22,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
   FutureOr<void> addTodoFunction(
       AddTodoEvent event, Emitter<TodoState> emit) async {
+    print(event.todo.description);
     emit(TodoLoadingState());
     try {
-      if (!isExist) {
-        emit(TodoErrorState(msg: 'Database doesnot exits'));
-      }
-      await (insertTodo(event.todo));
-      final List<Todo> todos = await getTodos();
+      await databaseHelper.insertTodo(event.todo);
+
+      final List<Todo> todos = await databaseHelper.getTodos();
       emit(TodoLoadedState(todos: todos));
     } catch (e) {
       emit(TodoErrorState(msg: e.toString()));
@@ -39,10 +38,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       LoadTodoEvent event, Emitter<TodoState> emit) async {
     emit(TodoLoadingState());
     try {
-      if (!isExist) {
-        emit(TodoErrorState(msg: 'Database doesnot exits'));
-      }
-      final List<Todo> todos = await getTodos();
+      final List<Todo> todos = await databaseHelper.getTodos();
       emit(TodoLoadedState(todos: todos));
     } catch (e) {
       emit(TodoErrorState(msg: e.toString()));
@@ -59,47 +55,34 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
   FutureOr<void> navigateToupdateTodoPageFunction(
       UpdateButtonClickEvent event, Emitter<TodoState> emit) {
-    emit(NavigateToAddTodoPage());
+    emit(NavigateToUpdateTodoPage());
   }
 
   FutureOr<void> navigateToAddTodoPageFunction(
       FloatingActionbuttonClicked event, Emitter<TodoState> emit) {
-    emit(NavigateToUpdateTodoPage());
+    emit(NavigateToAddTodoPage());
   }
 
   //
 
-  Future<List<Todo>> getTodos() async {
-    final Database db = await database;
-    //we get the todos from database as map and convert them into dart objects
-    final List<Map<String, dynamic>> maps = await db.query('todos');
-    return List.generate(maps.length, (index) => Todo.fromMap(maps[index]));
-  }
+  // Future<void> updateTodo(Todo todo) async {
+  //   final Database db = await database;
+  //   await db.update(
+  //     'todos',
+  //     todo.toMap(),
+  //     where: 'id = ?',
+  //     whereArgs: [todo.id],
+  //     conflictAlgorithm: ConflictAlgorithm.replace,
+  //   );
+  // }
 
-  Future<void> insertTodo(Todo todo) async {
-    final Database db = await database;
-    await db.insert('todos', todo.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
-  }
-
-  Future<void> updateTodo(Todo todo) async {
-    final Database db = await database;
-    await db.update(
-      'todos',
-      todo.toMap(),
-      where: 'id = ?',
-      whereArgs: [todo.id],
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  Future<void> deleteTodo(int id) async {
-    final Database db = await database;
-    await db.delete(
-      'todos',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
+  // Future<void> deleteTodo(int id) async {
+  //   final Database db = await database;
+  //   await db.delete(
+  //     'todos',
+  //     where: 'id = ?',
+  //     whereArgs: [id],
+  //   );
+  // }
 }
 //conflict algorithm means if the data already exists , then it replace with new todo

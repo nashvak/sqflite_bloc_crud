@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_bloc/models/models.dart';
 
 class AddscreenAppbar extends StatelessWidget {
-  final titleController;
-  final descriptionController;
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
   const AddscreenAppbar({
     super.key,
     required this.titleController,
@@ -24,7 +24,7 @@ class AddscreenAppbar extends StatelessWidget {
             IconButton(
               onPressed: () {
                 Navigator.pop(context);
-                //context.go('/home');
+                todoBloc.add(LoadTodoEvent());
               },
               padding: const EdgeInsets.all(0),
               icon: Container(
@@ -43,8 +43,11 @@ class AddscreenAppbar extends StatelessWidget {
             IconButton(
               onPressed: () {
                 final todo = Todo(
-                    title: titleController, description: descriptionController);
+                    title: titleController.text,
+                    description: descriptionController.text);
+                print(todo.title);
                 todoBloc.add(AddTodoEvent(todo: todo));
+                Navigator.pop(context);
               },
               padding: const EdgeInsets.all(0),
               icon: Container(

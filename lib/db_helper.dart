@@ -4,6 +4,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'models/models.dart';
+
 class DatabaseHelper {
   static const _dbName = 'todo_database.db';
   static const _dbVersion = 1;
@@ -31,6 +33,21 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
     await db.execute(
-        '''CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT,description TEXT,)''');
+        '''CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL,description TEXT NOT NULL);''');
+  }
+
+  Future<List<Todo>> getTodos() async {
+    final Database? db = await database;
+    //we get the todos from database as map and convert them into dart objects
+    final List<Map<String, dynamic>> maps = await db!.query('todos');
+    return List.generate(maps.length, (index) => Todo.fromMap(maps[index]));
+  }
+
+  Future<void> insertTodo(Todo todo) async {
+    print(todo.title);
+    print(todo.description);
+    final Database? db = await database;
+    await db!.insert('todos', todo.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

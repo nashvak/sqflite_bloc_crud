@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'package:todo_app_bloc/screen/widgets/addscreen_appbar.dart';
+
+import '../bloc/todo_bloc.dart';
 
 class AddScreen extends StatelessWidget {
   AddScreen({
@@ -11,14 +14,15 @@ class AddScreen extends StatelessWidget {
   final TextEditingController contentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    // final todoBloc = BlocProvider.of<TodoBloc>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
         child: Column(
           children: [
             AddscreenAppbar(
-              titleController: titleController.text,
-              descriptionController: contentController.text,
+              titleController: titleController,
+              descriptionController: contentController,
             ),
             Expanded(
                 child: ListView(

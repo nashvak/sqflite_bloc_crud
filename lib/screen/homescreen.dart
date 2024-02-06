@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:todo_app_bloc/screen/addscreen.dart';
 
 import '../bloc/todo_bloc.dart';
@@ -10,6 +9,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final todoBloc = BlocProvider.of<TodoBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -18,25 +18,40 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: BlocConsumer<TodoBloc, TodoState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is NavigateToAddTodoPage) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddScreen(),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is TodoLoadingState) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (state is TodoLoadedState) {
-            return ListView.builder(
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: const Text('title'),
-                    subtitle: const Text('descroption'),
-                    trailing: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.delete),
-                    ),
-                  );
-                });
+            if (state.todos.length == 0) {
+              return Center(
+                child: Text('No Todos'),
+              );
+            } else {
+              return ListView.builder(
+                  itemCount: state.todos.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(state.todos[index].title),
+                      subtitle: Text(state.todos[index].description),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.delete),
+                      ),
+                    );
+                  });
+            }
           } else if (state is TodoErrorState) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -50,12 +65,7 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddScreen(),
-            ),
-          );
+          todoBloc.add(FloatingActionbuttonClicked());
         },
         child: const Icon(Icons.add),
       ),
