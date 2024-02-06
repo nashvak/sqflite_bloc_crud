@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+
 import 'package:todo_app_bloc/screen/widgets/addscreen_appbar.dart';
 
 class AddScreen extends StatelessWidget {
-  AddScreen({super.key});
+  AddScreen({
+    super.key,
+  });
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   @override
@@ -12,7 +16,10 @@ class AddScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
         child: Column(
           children: [
-            const AddscreenAppbar(),
+            AddscreenAppbar(
+              titleController: titleController.text,
+              descriptionController: contentController.text,
+            ),
             Expanded(
                 child: ListView(
               children: [

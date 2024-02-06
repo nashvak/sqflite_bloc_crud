@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:todo_app_bloc/db_helper.dart';
 import 'package:todo_app_bloc/models/models.dart';
 
 part 'todo_event.dart';
 part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  final Future<Database> database;
-  final bool isExist;
-  TodoBloc(this.database, this.isExist) : super(TodoInitialState()) {
+  final DatabaseHelper databaseHelper = DatabaseHelper();
+  TodoBloc() : super(TodoInitialState()) {
     on<AddTodoEvent>(addTodoFunction);
     on<LoadTodoEvent>(loadTodoFunction);
     on<UpdateTodoEvent>(updateTodoFunction);

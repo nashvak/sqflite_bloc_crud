@@ -7,31 +7,25 @@ import 'package:todo_app_bloc/screen/homescreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Future<Database> database = openDatabase(
-    join(await getDatabasesPath(), 'todo_database.db'),
-    onCreate: (db, version) {
-      return db.execute(
-          'CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT,description TEXT,)');
-    },
-    version: 1,
-  );
-  bool databaseExist =
-      await databaseExists(join(await getDatabasesPath(), 'todo_database.db'));
-  runApp(MyApp(
-    database: database,
-    isDatabaseExists: databaseExist,
-  ));
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp(
-      {super.key, required this.database, required this.isDatabaseExists});
-  final Future<Database> database;
-  final bool isDatabaseExists;
+class MyApp extends StatefulWidget {
+  const MyApp({
+    super.key,
+    // required this.database,
+    // required this.isDatabaseExists,
+  });
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TodoBloc(database, isDatabaseExists),
+      create: (context) => TodoBloc()..add(LoadTodoEvent()),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Todo using bloc',
@@ -39,9 +33,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: HomeScreen(
-          database: database,
-        ),
+        home: HomeScreen(),
       ),
     );
   }
