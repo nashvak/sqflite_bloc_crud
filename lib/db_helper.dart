@@ -59,4 +59,21 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
+
+  Future<void> updateTodo(Todo todo) async {
+    // print(todo.title);
+    // print(todo.description);
+    try {
+      final Database? db = await database;
+      await db!.update(
+        'todos',
+        todo.toMap(),
+        where: 'id = ?',
+        whereArgs: [todo.id],
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

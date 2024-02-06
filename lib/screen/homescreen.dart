@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_bloc/screen/addscreen.dart';
+import 'package:todo_app_bloc/screen/update_screen.dart';
 
 import '../bloc/todo_bloc.dart';
 
@@ -26,6 +27,19 @@ class HomeScreen extends StatelessWidget {
                 builder: (context) => AddScreen(),
               ),
             );
+          } else if (state is NavigateToUpdateTodoPage) {
+            final todoToUpdate = state.todo;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UpdateScreen(
+                  todo: todoToUpdate,
+                ),
+              ),
+            );
+          } else if (state is TodoErrorState) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.msg)));
           }
         },
         builder: (context, state) {
@@ -43,6 +57,10 @@ class HomeScreen extends StatelessWidget {
                   itemCount: state.todos.length,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      onTap: () {
+                        todoBloc.add(
+                            GotoUpdateScreenEvent(todo: state.todos[index]));
+                      },
                       title: Text(state.todos[index].title),
                       subtitle: Text(state.todos[index].description),
                       trailing: IconButton(

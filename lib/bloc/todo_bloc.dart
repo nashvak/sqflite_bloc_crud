@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:todo_app_bloc/db_helper.dart';
 import 'package:todo_app_bloc/models/models.dart';
 
@@ -14,10 +13,10 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   TodoBloc() : super(TodoInitialState()) {
     on<AddTodoEvent>(addTodoFunction);
     on<LoadTodoEvent>(loadTodoFunction);
-    on<UpdateTodoEvent>(updateTodoFunction);
+    on<UpdateButtonClickedEvent>(updateTodoFunction);
     on<DeleteTodoEvent>(deleteTodoFunction);
     on<FloatingActionbuttonClicked>(navigateToAddTodoPageFunction);
-    on<UpdateButtonClickEvent>(navigateToupdateTodoPageFunction);
+    on<GotoUpdateScreenEvent>(navigateToupdateTodoPageFunction);
   }
 
   FutureOr<void> addTodoFunction(
@@ -46,7 +45,17 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   }
 
   FutureOr<void> updateTodoFunction(
-      UpdateTodoEvent event, Emitter<TodoState> emit) {}
+      UpdateButtonClickedEvent event, Emitter<TodoState> emit) async {
+    try {
+      // print(event.todo.title);
+      // print(event.todo.description);
+      await databaseHelper.updateTodo(event.todo);
+      final List<Todo> todos = await databaseHelper.getTodos();
+      emit(TodoLoadedState(todos: todos));
+    } catch (e) {
+      emit(TodoErrorState(msg: e.toString()));
+    }
+  }
 
   FutureOr<void> deleteTodoFunction(
       DeleteTodoEvent event, Emitter<TodoState> emit) async {
@@ -62,8 +71,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   //  navigation
 
   FutureOr<void> navigateToupdateTodoPageFunction(
-      UpdateButtonClickEvent event, Emitter<TodoState> emit) {
-    emit(NavigateToUpdateTodoPage());
+      GotoUpdateScreenEvent event, Emitter<TodoState> emit) {
+    emit(NavigateToUpdateTodoPage(todo: event.todo));
   }
 
   FutureOr<void> navigateToAddTodoPageFunction(
@@ -72,16 +81,5 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   }
 
   //
-
-  // Future<void> updateTodo(Todo todo) async {
-  //   final Database db = await database;
-  //   await db.update(
-  //     'todos',
-  //     todo.toMap(),
-  //     where: 'id = ?',
-  //     whereArgs: [todo.id],
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
 }
 //conflict algorithm means if the data already exists , then it replace with new todo

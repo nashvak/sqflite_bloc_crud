@@ -23,4 +23,8 @@ class TodoErrorState extends TodoState {
 //
 class NavigateToAddTodoPage extends TodoActionState {}
 
-class NavigateToUpdateTodoPage extends TodoActionState {}
+class NavigateToUpdateTodoPage extends TodoActionState {
+  final Todo todo;
+
+  NavigateToUpdateTodoPage({required this.todo});
+}

@@ -11,10 +11,10 @@ class AddTodoEvent extends TodoEvent {
   AddTodoEvent({required this.todo});
 }
 
-class UpdateTodoEvent extends TodoEvent {
+class UpdateButtonClickedEvent extends TodoEvent {
   final Todo todo;
 
-  UpdateTodoEvent({required this.todo});
+  UpdateButtonClickedEvent({required this.todo});
 }
 
 class DeleteTodoEvent extends TodoEvent {
@@ -25,4 +25,8 @@ class DeleteTodoEvent extends TodoEvent {
 
 class FloatingActionbuttonClicked extends TodoEvent {}
 
-class UpdateButtonClickEvent extends TodoEvent {}
+class GotoUpdateScreenEvent extends TodoEvent {
+  final Todo todo;
+
+  GotoUpdateScreenEvent({required this.todo});
+}
