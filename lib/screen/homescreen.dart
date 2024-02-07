@@ -82,6 +82,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         icon: const Icon(Icons.delete),
                       ),
+                      leading: Image.memory(
+                        state.todos[index].imageBytes,
+                        width: 50,
+                        height: 50,
+                      ),
                     );
                   });
             }
