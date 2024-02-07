@@ -6,7 +6,7 @@ import '../models/models.dart';
 
 class UpdateScreen extends StatefulWidget {
   final Todo todo;
-  UpdateScreen({super.key, required this.todo});
+  const UpdateScreen({super.key, required this.todo});
 
   @override
   State<UpdateScreen> createState() => _UpdateScreenState();
@@ -64,12 +64,13 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   ),
                   IconButton(
                     onPressed: () {
-                      final todo = Todo(
-                          title: titleController.text,
-                          description: descriptionController.text);
+                      // final todo = Todo(
+                      //     title: titleController.text,
+                      //     description: descriptionController.text,
+                      //     imageBytes: );
                       // print(todo.title);
                       // print(todo.description);
-                      todoBloc.add(UpdateButtonClickedEvent(todo: todo));
+                      // todoBloc.add(UpdateButtonClickedEvent(todo: todo));
                       Navigator.pop(context);
                     },
                     padding: const EdgeInsets.all(0),

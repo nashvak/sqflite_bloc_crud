@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:todo_app_bloc/bloc/todo_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,10 +8,12 @@ import 'package:todo_app_bloc/models/models.dart';
 class AddscreenAppbar extends StatelessWidget {
   final TextEditingController titleController;
   final TextEditingController descriptionController;
+  final File imageFile;
   const AddscreenAppbar({
     super.key,
     required this.titleController,
     required this.descriptionController,
+    required this.imageFile,
   });
 
   @override
@@ -41,10 +45,12 @@ class AddscreenAppbar extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {
+              onPressed: () async {
+                final bytes = await imageFile.readAsBytes();
                 final todo = Todo(
                     title: titleController.text,
-                    description: descriptionController.text);
+                    description: descriptionController.text,
+                    imageBytes: bytes);
                 print(todo.title);
                 todoBloc.add(AddTodoEvent(todo: todo));
                 Navigator.pop(context);

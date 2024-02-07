@@ -33,7 +33,7 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
     await db.execute(
-        '''CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL,description TEXT NOT NULL);''');
+        '''CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL,description TEXT NOT NULL,imageBytes BLOB);''');
   }
 
   Future<List<Todo>> getTodos() async {
@@ -60,7 +60,7 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> updateTodo(Todo todo) async {
+  Future updateTodo(Todo todo) async {
     // print(todo.title);
     // print(todo.description);
     try {
@@ -72,6 +72,11 @@ class DatabaseHelper {
         whereArgs: [todo.id],
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      // int updatedId = await db!.rawUpdate(
+      //     'UPDATE todos SET title= ?,description = ? WHERE id = ?',
+      //     [todo.title, todo.description, todo.id]);
+      // print(updatedId);
+      // return updatedId;
     } catch (e) {
       print(e.toString());
     }

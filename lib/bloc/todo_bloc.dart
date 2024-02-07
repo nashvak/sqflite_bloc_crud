@@ -47,8 +47,6 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   FutureOr<void> updateTodoFunction(
       UpdateButtonClickedEvent event, Emitter<TodoState> emit) async {
     try {
-      // print(event.todo.title);
-      // print(event.todo.description);
       await databaseHelper.updateTodo(event.todo);
       final List<Todo> todos = await databaseHelper.getTodos();
       emit(TodoLoadedState(todos: todos));

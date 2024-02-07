@@ -5,9 +5,14 @@ import 'package:todo_app_bloc/screen/update_screen.dart';
 
 import '../bloc/todo_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final todoBloc = BlocProvider.of<TodoBloc>(context);
@@ -17,6 +22,13 @@ class HomeScreen extends StatelessWidget {
           'Tasks',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {});
+              },
+              icon: Icon(Icons.refresh))
+        ],
       ),
       body: BlocConsumer<TodoBloc, TodoState>(
         listener: (context, state) {
